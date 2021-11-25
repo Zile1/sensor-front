@@ -28,7 +28,7 @@ export class SensorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getSensorsList(); // uncomment this when you will have connection to your API
-    // this.sensorsList = [{id: 1, temperature: 100}, {id: 2, temperature: 200}, {id: 3, temperature: 300}, {id: 4, temperature: 400}] // remove this after you uncomment above method
+    // this.sensorsList = [{id: 1, temperature: 100}, {id: 1, temperature: 100}] // remove this after you uncomment above method
   }
 
   ngOnDestroy(): void {
@@ -65,5 +65,16 @@ export class SensorComponent implements OnInit, OnDestroy {
    */
   public get isSensorsExists(): boolean {
     return this.sensorsList && this.sensorsList.length > 0;
+  }
+
+  /**
+   * Count sensors
+   *
+   * @readonly
+   * @type {number}
+   * @memberof SensorComponent
+   */
+  public get countSensors(): number {
+    return this.sensorsList && this.sensorsList.length;
   }
 }

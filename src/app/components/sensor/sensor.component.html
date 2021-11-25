@@ -10,7 +10,8 @@
       <app-sensor-card
       *ngFor="let sensor of sensorsList"
       [id]="sensor.id"
-      [temperature]="sensor.temperature"></app-sensor-card>
+      [temperature]="sensor.temperature"
+      [class.width-for-two]="countSensors < 3"></app-sensor-card>
     </ng-container>
     <ng-template #noSensors>
       <p class="no-sensors">There is no sensors in list!</p>

@@ -4,6 +4,10 @@
     margin: 15px;
 }
 
+:host.width-for-two {
+    max-width: 300px;
+}
+
 .sensor-card {
     width: 100%;
     border-radius: 8px;
@@ -27,6 +31,7 @@
 @media screen and (max-width: 800px) {
     :host {
         width: 100%;
+        max-width: 100% !important;
         margin: 15px 0px;
     }
 }
