@@ -27,8 +27,8 @@ export class SensorComponent implements OnInit, OnDestroy {
   constructor(private apollo: Apollo) {}
 
   ngOnInit(): void {
-    // this.getSensorsList(); // uncomment this when you will have connection to your API
-    this.sensorsList = [{id: 1, temperature: 100}, {id: 2, temperature: 200}, {id: 3, temperature: 300}, {id: 4, temperature: 400}] // remove this after you uncomment above method
+    this.getSensorsList(); // uncomment this when you will have connection to your API
+    // this.sensorsList = [{id: 1, temperature: 100}, {id: 2, temperature: 200}, {id: 3, temperature: 300}, {id: 4, temperature: 400}] // remove this after you uncomment above method
   }
 
   ngOnDestroy(): void {
@@ -47,9 +47,9 @@ export class SensorComponent implements OnInit, OnDestroy {
       query: GET_SENSORS,
     }).valueChanges.pipe(
       takeUntil(this.sensorsListNotifier$))
-    .subscribe(({ result: { data } }: any) => { // i think that this destructuring is ok (don't have real response to check), if not, check where problem is and change
-      if (data.sensors) {
-        this.sensorsList = data.sensors;
+    .subscribe(({ data: { sensors } }: any) => {
+      if (sensors) {
+        this.sensorsList = sensors;
       }
     }, (error) => {
       console.log("Something went wrong!", error)
