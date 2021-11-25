@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SensorComponent } from './sensor/sensor.component';
+import { SensorComponent, SensorCardComponent, NavigationComponent } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { MatCardModule } from "@angular/material/card";
@@ -12,7 +12,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    SensorComponent
+    SensorComponent,
+    SensorCardComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
