@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.sensors h1 {
+  font-size: 36px;
+  line-height: 42px;
+  margin: 20px 0px;
+  text-align: center;
+}
+
+.sensors-list {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.sensors-list p.no-sensors {
+  font-size: 16px;
+  line-height: 22px;
+  text-align: center;
+  padding: 15px 40px;
+  border: 1px solid #9dbbed;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 800px) {
+  .sensors-list {
+    width: 90%;
+    margin: 0 auto;
+    flex-direction: column;
+  }
+}

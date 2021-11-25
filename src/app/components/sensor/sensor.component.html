@@ -1,0 +1,21 @@
+<!-- begin:: Navigation -->
+<app-navigation></app-navigation>
+<!-- end:: Navigation -->
+
+<!-- begin:: Sensors list -->
+<div class="sensors">
+  <h1>Sensors list</h1>
+  <div class="sensors-list">
+    <ng-container *ngIf="isSensorsExists; else noSensors">
+      <app-sensor-card
+      *ngFor="let sensor of sensorsList"
+      [id]="sensor.id"
+      [temperature]="sensor.temperature"
+      [class.width-for-two]="countSensors < 3"></app-sensor-card>
+    </ng-container>
+    <ng-template #noSensors>
+      <p class="no-sensors">There is no sensors in list!</p>
+    </ng-template>
+  </div>
+</div>
+<!-- end:: Sensors list -->
