@@ -1,6 +1,10 @@
 interface Sensor {
-    id: number;
-    temperature: number;
+  id: number;
+  temperature: number;
 }
 
-export { Sensor }
+interface Sensors {
+  sensors: Sensor[];
+}
+
+export { Sensor, Sensors }

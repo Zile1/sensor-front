@@ -9,6 +9,9 @@ import { environment } from '../environments/environment';
 import { MatCardModule } from "@angular/material/card";
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const socketIoConfig: SocketIoConfig = { url: 'http://localhost:8088', options: {} };
 
 @NgModule({
   declarations: [
@@ -28,7 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
       registrationStrategy: 'registerWhenStable:30000'
     }),
     GraphQLModule,
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule.forRoot(socketIoConfig)
   ],
   providers: [],
   bootstrap: [SensorComponent]
