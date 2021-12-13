@@ -20,7 +20,7 @@ const GET_SENSORS = gql`
 })
 
 export class SensorComponent implements OnInit, OnDestroy {
-  public sensorsList: Sensor[];
+  public sensorsList: Sensor[] = [];
 
   private sensorsListNotifier$ = new Subject();
 
@@ -41,9 +41,9 @@ export class SensorComponent implements OnInit, OnDestroy {
    * Get sensors list
    *
    * @private
-   * @memberof SensorComponent
+   * @memberOf SensorComponent
    */
-  private async getSensorsList(): Promise<void> {
+  private getSensorsList(): void {
     this.apollo.watchQuery<Sensors>({
       query: GET_SENSORS,
     }).valueChanges.pipe(
@@ -65,7 +65,7 @@ export class SensorComponent implements OnInit, OnDestroy {
    *
    * @readonly
    * @type {boolean}
-   * @memberof SensorComponent
+   * @memberOf SensorComponent
    */
   public get isSensorsExists(): boolean {
     return this.sensorsList && this.sensorsList.length > 0;
@@ -89,7 +89,7 @@ export class SensorComponent implements OnInit, OnDestroy {
    * @param room
    * @memberOf SensorComponent
    */
-  public async joinRoom(room: string): Promise<void> {
+  public joinRoom(room: string): void {
     this.socket.emit('joinRoom', room);
   }
 
@@ -99,14 +99,17 @@ export class SensorComponent implements OnInit, OnDestroy {
    * @private
    * @memberOf SensorComponent
    */
-  private async listenSocket(): Promise<void> {
+  private listenSocket(): void {
     this.socket.on('sensor', (data: Sensor) => {
-      this.sensorsList.forEach((sensor) => {
-        console.log(sensor);
-        if (sensor.id === data.id) {
-          sensor.temperature = data.temperature;
-        }
-      });
+      const isId = (sensor: Sensor) => sensor.id === data.id;
+      const index = this.sensorsList.findIndex(isId);
+      console.log('INDEX', index);
+      if (index != undefined) {
+        const cloned: Sensor[] = [];
+        this.sensorsList.forEach(val => cloned.push(Object.assign({}, val)));
+        cloned[index] = data;
+        this.sensorsList = cloned;
+      }
     });
   }
 }
