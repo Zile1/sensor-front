@@ -76,16 +76,29 @@ export class SensorComponent implements OnInit, OnDestroy {
    *
    * @readonly
    * @type {number}
-   * @memberof SensorComponent
+   * @memberOf SensorComponent
    */
   public get countSensors(): number {
     return this.sensorsList && this.sensorsList.length;
   }
 
+  /**
+   * Join sensor room in order to listen changes.
+   *
+   * @type {string}
+   * @param room
+   * @memberOf SensorComponent
+   */
   public async joinRoom(room: string): Promise<void> {
     this.socket.emit('joinRoom', room);
   }
 
+  /**
+   * Listen socket changes.
+   *
+   * @private
+   * @memberOf SensorComponent
+   */
   private async listenSocket(): Promise<void> {
     this.socket.on('sensor', (data: Sensor) => {
       this.sensorsList.forEach((sensor) => {
