@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {Apollo, gql} from "apollo-angular";
+import { Apollo, gql } from "apollo-angular";
 import { Subject } from 'rxjs';
 import { takeUntil } from "rxjs/operators";
-import { Sensor } from 'src/app/models';
+import { Sensor, Sensors } from 'src/app/models';
+import { Socket } from "ngx-socket-io";
 
 const GET_SENSORS = gql`
   {
@@ -24,11 +24,12 @@ export class SensorComponent implements OnInit, OnDestroy {
 
   private sensorsListNotifier$ = new Subject();
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo,
+              private socket: Socket) {}
 
   ngOnInit(): void {
-    this.getSensorsList(); // uncomment this when you will have connection to your API
-    // this.sensorsList = [{id: 1, temperature: 100}, {id: 1, temperature: 100}] // remove this after you uncomment above method
+    this.getSensorsList();
+    this.listenSocket();
   }
 
   ngOnDestroy(): void {
@@ -42,18 +43,21 @@ export class SensorComponent implements OnInit, OnDestroy {
    * @private
    * @memberof SensorComponent
    */
-  private getSensorsList(): void {
-    this.apollo.watchQuery({
+  private async getSensorsList(): Promise<void> {
+    this.apollo.watchQuery<Sensors>({
       query: GET_SENSORS,
     }).valueChanges.pipe(
       takeUntil(this.sensorsListNotifier$))
-    .subscribe(({ data: { sensors } }: any) => {
-      if (sensors) {
-        this.sensorsList = sensors;
-      }
-    }, (error) => {
-      console.log("Something went wrong!", error)
-    });
+      .subscribe((result: any) => {
+        if (result.data.sensors) {
+          result.data.sensors.forEach((sensor: Sensor) => {
+            this.joinRoom(`sensor/${sensor.id}`);
+          });
+          this.sensorsList = result.data.sensors;
+        }
+      }, (error) => {
+        console.log("Something went wrong!", error)
+      });
   }
 
   /**
@@ -76,5 +80,20 @@ export class SensorComponent implements OnInit, OnDestroy {
    */
   public get countSensors(): number {
     return this.sensorsList && this.sensorsList.length;
+  }
+
+  public async joinRoom(room: string): Promise<void> {
+    this.socket.emit('joinRoom', room);
+  }
+
+  private async listenSocket(): Promise<void> {
+    this.socket.on('sensor', (data: Sensor) => {
+      this.sensorsList.forEach((sensor) => {
+        console.log(sensor);
+        if (sensor.id === data.id) {
+          sensor.temperature = data.temperature;
+        }
+      });
+    });
   }
 }
