@@ -50,9 +50,9 @@ export class SensorComponent implements OnInit, OnDestroy {
       takeUntil(this.sensorsListNotifier$))
       .subscribe((result: any) => {
         if (result.data.sensors) {
-          result.data.sensors.forEach((sensor: Sensor) => {
-            this.joinRoom(`sensor/${sensor.id}`);
-          });
+          // result.data.sensors.forEach((sensor: Sensor) => {
+          //   this.joinRoom(`sensor/${sensor.id}`);
+          // });
           this.sensorsList = result.data.sensors;
         }
       }, (error) => {
@@ -103,11 +103,14 @@ export class SensorComponent implements OnInit, OnDestroy {
     this.socket.on('sensor', (data: Sensor) => {
       const isId = (sensor: Sensor) => sensor.id === data.id;
       const index = this.sensorsList.findIndex(isId);
-      console.log('INDEX', index);
-      if (index != undefined) {
-        const cloned: Sensor[] = [];
-        this.sensorsList.forEach(val => cloned.push(Object.assign({}, val)));
+      const cloned: Sensor[] = [];
+      this.sensorsList.forEach(val => cloned.push(Object.assign({}, val)));
+      if (index != -1) {
         cloned[index] = data;
+        this.sensorsList = cloned;
+      }
+      else {
+        cloned.push(data);
         this.sensorsList = cloned;
       }
     });
